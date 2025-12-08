@@ -5,8 +5,12 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True)
 class Fractional:
     """
-    A class representing rational numbers (fractions) with integer numerator and denominator.
+    Represents a rational number (fraction) with integer numerator and denominator.
+    The fraction is always stored in normalized form:
+    - The denominator is always positive.
+    - The numerator and denominator are divided by their greatest common divisor.
     Supports arithmetic and comparison operations with other Fractional objects and integers.
+    Raises ValueError if denominator is zero.
     """
 
     x: int
@@ -20,18 +24,23 @@ class Fractional:
         if y < 0:
             x = -x
             y = -y
+        # skracamy ułamek dzieląc przez największy wspólny dzielnik
         gcd = math.gcd(x, y)
         object.__setattr__(self, 'x', x // gcd)
         object.__setattr__(self, 'y', y // gcd)
 
     def __repr__(self) -> str:
         """
-        Return the string representation of the Fractional object.
+        Return the developer-friendly string representation of the Fractional object.
+        Example: Fractional(1, 2)
         """
         return f"Fractional({self.x}, {self.y})"
 
     def __str__(self):
-        """Return the user-friendly string representation of the Fractional object."""
+        """
+        Return the user-friendly string representation of the Fractional object.
+        Example: '1/2'
+        """
         return f"{self.x}/{self.y}"
 
     def __add__(self, other):
@@ -91,7 +100,7 @@ class Fractional:
     def __truediv__(self, other):
         """
         Divide this Fractional by another Fractional or integer and return the result as a new Fractional.
-        Raises ZeroDivisionError if dividing by zero.
+        Raises ZeroDivisionError if dividing by zero Fractional or integer.
         """
         if isinstance(other, Fractional):
             if other.x == 0:
@@ -106,7 +115,7 @@ class Fractional:
     def __rtruediv__(self, other):
         """
         Divide an integer by this Fractional (right-hand side) and return the result as a new Fractional.
-        Raises ZeroDivisionError if dividing by zero.
+        Raises ZeroDivisionError if dividing by zero Fractional.
         """
         if isinstance(other, int):
             if self.x == 0:
@@ -116,11 +125,13 @@ class Fractional:
 
     def __eq__(self, other):
         """
-        Check if this Fractional is equal to another Fractional.
+        Check if this Fractional is equal to another Fractional or integer.
         """
-        if not isinstance(other, Fractional):
-            return NotImplemented
-        return self.x == other.x and self.y == other.y
+        if isinstance(other, Fractional):
+            return self.x == other.x and self.y == other.y
+        elif isinstance(other, int):
+            return self.x == other and self.y == 1
+        return NotImplemented
 
     def __lt__(self, other):
         """

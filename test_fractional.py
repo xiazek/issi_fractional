@@ -7,6 +7,7 @@ from fractional import Fractional
         (Fractional(1, 2), Fractional(1, 3), Fractional(5, 6)),
         (Fractional(2, 5), Fractional(1, 5), Fractional(3, 5)),
         (Fractional(-1, 4), Fractional(1, 2), Fractional(1, 4)),
+        (2, 2, 4),
     ]
 )
 def test_add(a, b, expected):
@@ -29,6 +30,8 @@ def test_sub(a, b, expected):
         (Fractional(1, 2), Fractional(1, 3), Fractional(1, 6)),
         (Fractional(2, 5), Fractional(5, 2), Fractional(1, 1)),
         (Fractional(-1, 4), Fractional(2, 3), Fractional(-1, 6)),
+        # compare resilt with ingeger
+        (Fractional(1, 4), 4, 1),
     ]
 )
 def test_mul(a, b, expected):
@@ -40,6 +43,8 @@ def test_mul(a, b, expected):
         (Fractional(1, 2), Fractional(1, 3), Fractional(3, 2)),
         (Fractional(2, 5), Fractional(1, 5), Fractional(2, 1)),
         (Fractional(-1, 4), Fractional(2, 3), Fractional(-3, 8)),
+        # 1/4 / 1/2 == 1/2,
+        (Fractional(1, 4), Fractional(1, 2), Fractional(1, 2)),
     ]
 )
 def test_truediv(a, b, expected):
@@ -142,6 +147,7 @@ def test_comparisons_int(a, b, expected):
         (Fractional(-3, 4), "-3/4"),
         (Fractional(10, -5), "-2/1"),
         (Fractional(0, 7), "0/1"),
+        (Fractional(2, 2), "1/1"),
     ]
 )
 def test_str(frac, expected_str):
