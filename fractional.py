@@ -1,27 +1,28 @@
 import math
+from dataclasses import dataclass, field
 
 
+@dataclass(frozen=True)
 class Fractional:
     """
     A class representing rational numbers (fractions) with integer numerator and denominator.
     Supports arithmetic and comparison operations with other Fractional objects and integers.
     """
 
-    def __init__(self, x: int, y: int):
-        """
-        Initialize a Fractional object with numerator x and denominator y.
-        The fraction is always stored in reduced form with a positive denominator.
-        Raises ValueError if denominator is zero.
-        """
-        if y == 0:
+    x: int
+    y: int
+
+    def __post_init__(self):
+        if self.y == 0:
             raise ValueError("Denominator cannot be zero.")
         # Normalize sign
+        x, y = self.x, self.y
         if y < 0:
             x = -x
             y = -y
         gcd = math.gcd(x, y)
-        self.x = x // gcd
-        self.y = y // gcd
+        object.__setattr__(self, 'x', x // gcd)
+        object.__setattr__(self, 'y', y // gcd)
 
     def __repr__(self) -> str:
         """
