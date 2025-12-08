@@ -153,3 +153,16 @@ def test_comparisons_int(a, b, expected):
 def test_str(frac, expected_str):
     assert str(frac) == expected_str
 
+@pytest.mark.parametrize(
+    "frac1, frac2, expected_str",
+    [
+        (Fractional(1, 2), Fractional(1, 2), "1/2 + 1/2 = 1/1"),
+        (Fractional(1, 2), Fractional(2, 4), "1/2 + 1/2 = 1/1"),
+        # TODO: we want the below
+        # (Fractional(1, 2), Fractional(2, 4), "3/6 + 2/4 = 1/1"),
+    ]
+)
+def test_str_representation(frac1, frac2, expected_str):
+    result = frac1 + frac2
+    actual_str = f"{str(frac1)} + {str(frac2)} = {str(result)}"
+    assert actual_str == expected_str
