@@ -10,30 +10,64 @@ class Fractional:
     - The denominator is always positive.
     - The numerator and denominator are divided by their greatest common divisor.
     - Original values before normalization are stored in original_x and original_y.
+
+    Args:
+        x: Numerator of the fraction
+        y: Denominator of the fraction
+        normalize_original: If True, applies GCD normalization to original values. Default is False.
+
     Supports arithmetic and comparison operations with other Fractional objects and integers.
     Raises ValueError if denominator is zero.
     """
 
     x: int
     y: int
+    normalize_original: bool = False
     original_x: int = field(init=False)
     original_y: int = field(init=False)
 
     def __post_init__(self):
         if self.y == 0:
             raise ValueError("Denominator cannot be zero.")
-        # przenieś znak minus do licznika
+        # Move any minus sign from denominator to numerator
         x, y = self.x, self.y
         if y < 0:
             x = -x
             y = -y
-        # Zachowaj oryginalne wartości
-        object.__setattr__(self, 'original_x', x)
-        object.__setattr__(self, 'original_y', y)
-        # skracamy ułamek dzieląc przez największy wspólny dzielnik
+        # Keep originals for string representation by default
+        orig_x, orig_y = x, y
+        # Always normalize internal representation for math/repr/comparisons
+        norm_x, norm_y = self._find_gcd(x, y)
+        # If requested, also normalize the "original" pair so str() shows reduced form
+        if self.normalize_original:
+            orig_x, orig_y = norm_x, norm_y
+        # Set attributes
+        object.__setattr__(self, 'original_x', orig_x)
+        object.__setattr__(self, 'original_y', orig_y)
+        object.__setattr__(self, 'x', norm_x)
+        object.__setattr__(self, 'y', norm_y)
+
+    @staticmethod
+    def _find_gcd(x: int, y: int) -> tuple[int, int]:
+        """
+        Apply GCD normalization to x and y.
+
+        Args:
+            x: Numerator
+            y: Denominator
+
+        Returns:
+            A tuple of (x // gcd, y // gcd)
+
+        Example:
+            _find_gcd(6, 8) returns (3, 4)
+        """
         gcd = math.gcd(x, y)
-        object.__setattr__(self, 'x', x // gcd)
-        object.__setattr__(self, 'y', y // gcd)
+        return x // gcd, y // gcd
+
+    def _is_original_reduced(self) -> bool:
+        """Return True if the stored original numerator/denominator are in lowest terms."""
+        return math.gcd(abs(self.original_x), abs(self.original_y)) == 1
 
     def __repr__(self) -> str:
         """
@@ -56,9 +90,11 @@ class Fractional:
         if isinstance(other, Fractional):
             num = self.x * other.y + other.x * self.y
             denom = self.y * other.y
-            return Fractional(num, denom)
+            # normalize = self._is_original_reduced() or other._is_original_reduced()
+            normalize = True
+            return Fractional(num, denom, normalize_original=True)
         elif isinstance(other, int):
-            return Fractional(self.x + other * self.y, self.y)
+            return Fractional(self.x + other * self.y, self.y, normalize_original=True)
         return NotImplemented
 
     def __radd__(self, other):

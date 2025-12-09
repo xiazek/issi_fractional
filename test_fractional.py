@@ -2,6 +2,27 @@ import pytest
 from fractional import Fractional
 
 @pytest.mark.parametrize(
+    "x, y, normalize, exp_x, exp_y, exp_orig_x, exp_orig_y, exp_str",
+    [
+        # basic without normalization flag
+        # internal (x,y) are always normalized; originals keep only sign normalization
+        (1, 2, False, 1, 2, 1, 2, "1/2"),
+        (1, -2, False, -1, 2, -1, 2, "-1/2"),
+        (-1, -2, False, 1, 2, 1, 2, "1/2"),
+        # with normalization flag: originals are also gcd-normalized
+        (2, 4, True, 1, 2, 1, 2, "1/2"),
+        (3, -6, True, -1, 2, -1, 2, "-1/2"),
+        (-3, -6, True, 1, 2, 1, 2, "1/2"),
+        (0, -7, True, 0, 1, 0, 1, "0/1"),
+    ]
+)
+def test_initializer_parametrized(x, y, normalize, exp_x, exp_y, exp_orig_x, exp_orig_y, exp_str):
+    f = Fractional(x, y, normalize)
+    assert (f.x, f.y) == (exp_x, exp_y)
+    assert (f.original_x, f.original_y) == (exp_orig_x, exp_orig_y)
+    assert str(f) == exp_str
+
+@pytest.mark.parametrize(
     "a, b, expected",
     [
         (Fractional(1, 2), Fractional(1, 3), Fractional(5, 6)),
@@ -134,8 +155,8 @@ def test_str(frac, expected_str):
 @pytest.mark.parametrize(
     "frac1, frac2, expected_str",
     [
-        (Fractional(1, 2), Fractional(1, 4), "1/2 + 1/4 = 6/8"),
-        (Fractional(3, 6), Fractional(2, 4), "3/6 + 2/4 = 4/4"),
+        (Fractional(1, 2), Fractional(1, 4), "1/2 + 1/4 = 3/4"),
+        (Fractional(3, 6), Fractional(2, 4), "3/6 + 2/4 = 1/1"),
         (Fractional(1, 1), Fractional(2, 2), "1/1 + 2/2 = 2/1"),
         (Fractional(3, -1), Fractional(2, -2), "-3/1 + -2/2 = -4/1"),
     ]
