@@ -110,9 +110,9 @@ class Fractional:
         if isinstance(other, Fractional):
             num = self.x * other.y - other.x * self.y
             denom = self.y * other.y
-            return Fractional(num, denom)
+            return Fractional(num, denom, normalize_original=True)
         elif isinstance(other, int):
-            return Fractional(self.x - other * self.y, self.y)
+            return Fractional(self.x - other * self.y, self.y, normalize_original=True)
         return NotImplemented
 
     def __rsub__(self, other):
@@ -128,9 +128,9 @@ class Fractional:
         Multiply this Fractional by another Fractional or integer and return the result as a new Fractional.
         """
         if isinstance(other, Fractional):
-            return Fractional(self.x * other.x, self.y * other.y)
+            return Fractional(self.x * other.x, self.y * other.y, normalize_original=True)
         elif isinstance(other, int):
-            return Fractional(self.x * other, self.y)
+            return Fractional(self.x * other, self.y, normalize_original=True)
         return NotImplemented
 
     def __rmul__(self, other):
@@ -147,11 +147,11 @@ class Fractional:
         if isinstance(other, Fractional):
             if other.x == 0:
                 raise ZeroDivisionError("Cannot divide by zero Fractional.")
-            return Fractional(self.x * other.y, self.y * other.x)
+            return Fractional(self.x * other.y, self.y * other.x, normalize_original=True)
         elif isinstance(other, int):
             if other == 0:
                 raise ZeroDivisionError("Cannot divide by zero integer.")
-            return Fractional(self.x, self.y * other)
+            return Fractional(self.x, self.y * other, normalize_original=True)
         return NotImplemented
 
     def __rtruediv__(self, other):

@@ -55,21 +55,22 @@ def test_sub(a, b, expected):
     assert a - b == expected
 
 @pytest.mark.parametrize(
-    "a, b, expected",
+    "a, b, expected, expected_str",
     [
-        (Fractional(1, 2), Fractional(1, 3), Fractional(1, 6)),
-        (Fractional(2, 5), Fractional(5, 2), Fractional(1, 1)),
-        (Fractional(-1, 4), Fractional(2, 3), Fractional(-1, 6)),
+        (Fractional(1, 2), Fractional(1, 3), Fractional(1, 6), '1/6'),
+        (Fractional(2, 5), Fractional(5, 2), Fractional(1, 1), '1/1'),
+        (Fractional(-1, 4), Fractional(2, 3), Fractional(-1, 6), '-1/6'),
         # with int
-        (Fractional(1, 4), 4, 1),
-        (Fractional(1, 2), 2, Fractional(1, 1)),
-        (2, Fractional(1, 2), Fractional(1, 1)),
-        (Fractional(2, 5), 5, Fractional(2, 1)),
-        (Fractional(-1, 4), 2, Fractional(-1, 2)),
+        (Fractional(1, 4), 4, 1, "1/1"),
+        (Fractional(1, 2), 2, Fractional(1, 1), "1/1"),
+        (2, Fractional(1, 2), Fractional(1, 1), "1/1"),
+        (Fractional(2, 5), 5, Fractional(2, 1), "2/1"),
+        (Fractional(-1, 4), 2, Fractional(-1, 2), "-1/2"),
     ]
 )
-def test_mul(a, b, expected):
+def test_mul(a, b, expected, expected_str):
     assert a * b == expected
+    assert str(a * b) == expected_str
 
 @pytest.mark.parametrize(
     "a, b, expected",
