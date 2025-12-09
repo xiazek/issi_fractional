@@ -85,7 +85,8 @@ class Fractional:
 
     def __add__(self, other):
         """
-        Add another Fractional or integer to this Fractional and return the result as a new Fractional.
+        Add another Fractional or integer to this Fractional and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         """
         if isinstance(other, Fractional):
             num = self.x * other.y + other.x * self.y
@@ -99,13 +100,15 @@ class Fractional:
 
     def __radd__(self, other):
         """
-        Add this Fractional to an integer (right-hand side) and return the result as a new Fractional.
+        Add this Fractional to an integer (right-hand side) and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         """
         return self.__add__(other)
 
     def __sub__(self, other):
         """
-        Subtract another Fractional or integer from this Fractional and return the result as a new Fractional.
+        Subtract another Fractional or integer from this Fractional and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         """
         if isinstance(other, Fractional):
             num = self.x * other.y - other.x * self.y
@@ -118,6 +121,7 @@ class Fractional:
     def __rsub__(self, other):
         """
         Subtract this Fractional from an integer (right-hand side) and return the result as a new Fractional.
+        Note: Unlike other operations, the result's display form is not normalized.
         """
         if isinstance(other, int):
             return Fractional(other * self.y - self.x, self.y)
@@ -125,7 +129,8 @@ class Fractional:
 
     def __mul__(self, other):
         """
-        Multiply this Fractional by another Fractional or integer and return the result as a new Fractional.
+        Multiply this Fractional by another Fractional or integer and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         """
         if isinstance(other, Fractional):
             return Fractional(self.x * other.x, self.y * other.y, normalize_original=True)
@@ -135,13 +140,15 @@ class Fractional:
 
     def __rmul__(self, other):
         """
-        Multiply an integer by this Fractional (right-hand side) and return the result as a new Fractional.
+        Multiply an integer by this Fractional (right-hand side) and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         """
         return self.__mul__(other)
 
     def __truediv__(self, other):
         """
-        Divide this Fractional by another Fractional or integer and return the result as a new Fractional.
+        Divide this Fractional by another Fractional or integer and return the result as a new normalized Fractional.
+        The result will be in reduced form (GCD applied to both internal and display values).
         Raises ZeroDivisionError if dividing by zero Fractional or integer.
         """
         if isinstance(other, Fractional):
@@ -157,6 +164,7 @@ class Fractional:
     def __rtruediv__(self, other):
         """
         Divide an integer by this Fractional (right-hand side) and return the result as a new Fractional.
+        Note: Unlike other operations, the result's display form is not normalized.
         Raises ZeroDivisionError if dividing by zero Fractional.
         """
         if isinstance(other, int):
