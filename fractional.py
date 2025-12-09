@@ -9,21 +9,27 @@ class Fractional:
     The fraction is always stored in normalized form:
     - The denominator is always positive.
     - The numerator and denominator are divided by their greatest common divisor.
+    - Original values before normalization are stored in original_x and original_y.
     Supports arithmetic and comparison operations with other Fractional objects and integers.
     Raises ValueError if denominator is zero.
     """
 
     x: int
     y: int
+    original_x: int = field(init=False)
+    original_y: int = field(init=False)
 
     def __post_init__(self):
         if self.y == 0:
             raise ValueError("Denominator cannot be zero.")
-        # Normalize sign
+        # przenieś znak minus do licznika
         x, y = self.x, self.y
         if y < 0:
             x = -x
             y = -y
+        # Zachowaj oryginalne wartości
+        object.__setattr__(self, 'original_x', x)
+        object.__setattr__(self, 'original_y', y)
         # skracamy ułamek dzieląc przez największy wspólny dzielnik
         gcd = math.gcd(x, y)
         object.__setattr__(self, 'x', x // gcd)
@@ -41,7 +47,7 @@ class Fractional:
         Return the user-friendly string representation of the Fractional object.
         Example: '1/2'
         """
-        return f"{self.x}/{self.y}"
+        return f"{self.original_x}/{self.original_y}"
 
     def __add__(self, other):
         """

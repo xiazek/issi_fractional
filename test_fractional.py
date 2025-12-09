@@ -123,9 +123,9 @@ def test_repr(frac, expected_repr):
     [
         (Fractional(1, 2), "1/2"),
         (Fractional(-3, 4), "-3/4"),
-        (Fractional(10, -5), "-2/1"),
-        (Fractional(0, 7), "0/1"),
-        (Fractional(2, 2), "1/1"),
+        (Fractional(10, -5), "-10/5"),
+        (Fractional(0, 7), "0/7"),
+        (Fractional(2, 2), "2/2"),
     ]
 )
 def test_str(frac, expected_str):
@@ -134,10 +134,10 @@ def test_str(frac, expected_str):
 @pytest.mark.parametrize(
     "frac1, frac2, expected_str",
     [
-        (Fractional(1, 2), Fractional(1, 2), "1/2 + 1/2 = 1/1"),
-        (Fractional(1, 2), Fractional(2, 4), "1/2 + 1/2 = 1/1"),
-        # TODO: we want the below
-        # (Fractional(3, 6), Fractional(2, 4), "3/6 + 2/4 = 1/1"),
+        (Fractional(1, 2), Fractional(1, 4), "1/2 + 1/4 = 6/8"),
+        (Fractional(3, 6), Fractional(2, 4), "3/6 + 2/4 = 4/4"),
+        (Fractional(1, 1), Fractional(2, 2), "1/1 + 2/2 = 2/1"),
+        (Fractional(3, -1), Fractional(2, -2), "-3/1 + -2/2 = -4/1"),
     ]
 )
 def test_str_representation(frac1, frac2, expected_str):
