@@ -65,10 +65,6 @@ class Fractional:
         gcd = math.gcd(x, y)
         return x // gcd, y // gcd
 
-    def _is_original_reduced(self) -> bool:
-        """Return True if the stored original numerator/denominator are in lowest terms."""
-        return math.gcd(abs(self.original_x), abs(self.original_y)) == 1
-
     def __repr__(self) -> str:
         """
         Return the developer-friendly string representation of the Fractional object.
@@ -91,8 +87,6 @@ class Fractional:
         if isinstance(other, Fractional):
             num = self.x * other.y + other.x * self.y
             denom = self.y * other.y
-            # normalize = self._is_original_reduced() or other._is_original_reduced()
-            normalize = True
             return Fractional(num, denom, normalize_original=True)
         elif isinstance(other, int):
             return Fractional(self.x + other * self.y, self.y, normalize_original=True)
