@@ -166,3 +166,16 @@ def test_str_representation(frac1, frac2, expected_str):
     result = frac1 + frac2
     actual_str = f"{str(frac1)} + {str(frac2)} = {str(result)}"
     assert actual_str == expected_str
+
+
+@pytest.mark.parametrize(
+    "left, right",
+    [
+        (Fractional(1, 2), Fractional(1, 2)),  # the same value
+        (Fractional(2, 4), Fractional(1, 2)),  # reduced equivalent
+        (2, Fractional(2, 1)),                 # int consistent with Fractional(2, 1)
+        (Fractional(3, 1), 3),                 # int consistent with Fractional(2, 1)
+    ],
+)
+def test_hash(left, right):
+    assert hash(left) == hash(right)

@@ -216,3 +216,8 @@ class Fractional:
         elif isinstance(other, int):
             return self.x >= other * self.y
         return NotImplemented
+
+    def __hash__(self) -> int:
+        if self.y == 1:
+            return hash(self.x)         # to be consistent with int equality
+        return hash((self.x, self.y))
