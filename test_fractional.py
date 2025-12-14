@@ -174,7 +174,7 @@ def test_str_representation(frac1, frac2, expected_str):
         (Fractional(1, 2), Fractional(1, 2)),  # the same value
         (Fractional(2, 4), Fractional(1, 2)),  # reduced equivalent
         (2, Fractional(2, 1)),                 # int consistent with Fractional(2, 1)
-        (Fractional(3, 1), 3),                 # int consistent with Fractional(2, 1)
+        (Fractional(3, 1), 3),                 # Fractional(2, 1) consistent with int
     ],
 )
 def test_hash(left, right):
