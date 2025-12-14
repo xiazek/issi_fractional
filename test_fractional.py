@@ -167,6 +167,27 @@ def test_str_representation(frac1, frac2, expected_str):
     actual_str = f"{str(frac1)} + {str(frac2)} = {str(result)}"
     assert actual_str == expected_str
 
+def test_normalized_result_after_subtraction():
+    # 1 - 1/2 = 1/2
+    res = 1 - Fractional(1, 2)
+    assert res == Fractional(1, 2)
+    assert str(res) == "1/2"
+
+    # 2 - 2/4 = (2*4 - 2)/4 = 6/4 -> 3/2
+    res2 = 2 - Fractional(2, 4)
+    assert res2 == Fractional(3, 2)
+    assert str(res2) == "3/2"
+
+def test_normalized_result_after_int_division():
+    # Basic reflected division: 1 / (2/3) = 3/2
+    res = 1 / Fractional(2, 3)
+    assert res == Fractional(3, 2)
+    assert str(res) == "3/2"
+
+    # Reduction visible: 2 / (4/6) = 2 * 6/4 = 12/4 -> 3/1
+    res2 = 2 / Fractional(4, 6)
+    assert res2 == Fractional(3, 1)
+    assert str(res2) == "3/1"
 
 @pytest.mark.parametrize(
     "left, right",

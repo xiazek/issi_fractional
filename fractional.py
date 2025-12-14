@@ -105,7 +105,7 @@ class Fractional:
         Note: Unlike other operations, the result's display form is not normalized.
         """
         if isinstance(other, int):
-            return Fractional(other * self.y - self.x, self.y)
+            return Fractional(other * self.y - self.x, self.y, normalize_original=True)
         return NotImplemented
 
     def __mul__(self, other):
@@ -151,7 +151,7 @@ class Fractional:
         if isinstance(other, int):
             if self.x == 0:
                 raise ZeroDivisionError("Cannot divide by zero Fractional.")
-            return Fractional(other * self.y, self.x)
+            return Fractional(other * self.y, self.x, normalize_original=True)
         return NotImplemented
 
     # ------- comparison methods ------------
