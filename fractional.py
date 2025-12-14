@@ -1,7 +1,6 @@
 import math
 from dataclasses import dataclass, field
 
-
 @dataclass(frozen=True)
 class Fractional:
     """
@@ -65,19 +64,7 @@ class Fractional:
         gcd = math.gcd(x, y)
         return x // gcd, y // gcd
 
-    def __repr__(self) -> str:
-        """
-        Return the developer-friendly string representation of the Fractional object.
-        Example: Fractional(1, 2)
-        """
-        return f"Fractional({self.x}, {self.y})"
-
-    def __str__(self):
-        """
-        Return the user-friendly string representation of the Fractional object.
-        Example: '1/2'
-        """
-        return f"{self.original_x}/{self.original_y}"
+    # ------- basic arithmetic methods ------------
 
     def __add__(self, other):
         """
@@ -167,6 +154,8 @@ class Fractional:
             return Fractional(other * self.y, self.x)
         return NotImplemented
 
+    # ------- comparison methods ------------
+
     def __eq__(self, other):
         """
         Check if this Fractional is equal to another Fractional or integer.
@@ -216,6 +205,22 @@ class Fractional:
         elif isinstance(other, int):
             return self.x >= other * self.y
         return NotImplemented
+
+    # ------- technical methods ------------
+
+    def __repr__(self) -> str:
+        """
+        Return the developer-friendly string representation of the Fractional object.
+        Example: Fractional(1, 2)
+        """
+        return f"Fractional({self.x}, {self.y})"
+
+    def __str__(self):
+        """
+        Return the user-friendly string representation of the Fractional object.
+        Example: '3/6'
+        """
+        return f"{self.original_x}/{self.original_y}"
 
     def __hash__(self) -> int:
         if self.y == 1:
